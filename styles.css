@@ -1,0 +1,30 @@
+body{
+    margin: 0;
+    background-color: #393E46;
+}
+h1{
+    text-align: center;
+    background-color:#00ADB5;
+    padding: 20px;
+    border-radius: 10px;
+}
+h3{
+    
+}
+.hs{
+    padding-right: 150px;
+}
+.score{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.pacman{
+    display: inline-block;
+    margin-top: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+    width: 100vh;
+    height: 70vh;
+    background-color: aliceblue;
+}
