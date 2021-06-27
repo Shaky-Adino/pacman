@@ -1,24 +1,99 @@
-// import { BOARD,OBJECT_TYPE } from "./index";
-// import GameBoard from "./GameBoard";
-document.querySelector('h1').style.color='red';
-alert('Shashanka mc');
-document.querySelector('.game-box').style.backgroundColor  = 'red';
-// gameBox.style.backgroundColor  = 'red';
-// const gameBoard = GameBoard;
+const GRID_SIZE = 20;
+const CELL_SIZE = 20;
+const DIRECTIONS = {
+  ArrowLeft: {
+    code: 37,
+    movement: -1,
+    rotation: 180
+  },
+  ArrowUp: {
+    code: 38,
+    movement: -GRID_SIZE,
+    rotation: 270
+  },
+  ArrowRight: {
+    code: 39,
+    movement: 1,
+    rotation: 0
+  },
+  ArrowDown: {
+    code: 40,
+    movement: GRID_SIZE,
+    rotation: 90
+  }
+};
 
-// gameBoard.createGrid(BOARD,gameBox);
+const OBJECT_TYPE = {
+  BLANK: 'blank',
+  WALL: 'wall',
+  DOT: 'dot',
+  BLINKY: 'blinky',
+  PINKY: 'pinky',
+  INKY: 'inky',
+  CLYDE: 'clyde',
+  PILL: 'pill',
+  PACMAN: 'pacman',
+  GHOST: 'ghost',
+  SCARED: 'scared',
+  GHOSTLAIR: 'lair'
+};
 
-// function createGrid(board,layout){
-//         layout.style.cssText = `grid-template-columns: repeat(${GRID_SIZE},${CELL_SIZE}px);`
-//         board.foreach((item)=>{
-//             const div = document.createElement('div');
-//             div.classList.add('square', CLASS_LIST[item]);
-//             div.style.cssText = `width: ${CELL_SIZE}px; height: ${CELL_SIZE}px;`
-//             layout.appendChild(div);
+// Lookup array for classes
+const CLASS_LIST = [
+  OBJECT_TYPE.BLANK,
+  OBJECT_TYPE.WALL,
+  OBJECT_TYPE.DOT,
+  OBJECT_TYPE.BLINKY,
+  OBJECT_TYPE.PINKY,
+  OBJECT_TYPE.INKY,
+  OBJECT_TYPE.CLYDE,
+  OBJECT_TYPE.PILL,
+  OBJECT_TYPE.PACMAN,
+  OBJECT_TYPE.GHOSTLAIR
+];
 
-//         })
-//     }
-//  createGrid(BOARD,gameBox);
+// prettier-ignore
+const BOARD = [
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+  1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1,
+  1, 7, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 7, 1,
+  1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+  1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1,
+  1, 2, 2, 2, 2, 1, 2, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 1,
+  1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1,
+  0, 0, 0, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0, 0, 0,
+  0, 0, 0, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 0, 0, 0,
+  1, 1, 1, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 1, 1, 1, 
+  1, 0, 0, 0, 2, 2, 2, 1, 9, 9, 9, 9, 1, 2, 2, 2, 0, 0, 0, 1, 
+  1, 1, 1, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 1, 1, 1, 
+  0, 0, 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 0, 0, 0,
+  0, 0, 0, 1, 2, 1, 2, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 0, 0, 0,
+  1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1,
+  1, 2, 2, 2, 2, 1, 2, 2, 2, 1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 1,
+  1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1,
+  1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+  1, 7, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 7, 1,
+  1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1,
+  1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+];
 
-//  for(let i=0;i<50;i++)
-//     gameBox.innerHTML+='<div class="square wall"></div>'
+//GameBoard.js
+class GameBoard{
+   
+    static createGrid(board,layout){
+        layout.style.cssText = `grid-template-columns: repeat(${GRID_SIZE},auto);`;
+        board.forEach((item)=>{
+            let div = document.createElement('div');
+            div.classList.add('square', CLASS_LIST[item]);
+            div.style.cssText = `width: ${CELL_SIZE}px; height: ${CELL_SIZE}px;`
+            layout.appendChild(div);
+        });
+    }
+   
+};
+const gameBox = document.querySelector('.game-box');
+
+GameBoard.createGrid(BOARD,gameBox);
+
