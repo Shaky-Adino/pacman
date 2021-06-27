@@ -12,19 +12,70 @@ h3{
     
 }
 .hs{
-    padding-right: 150px;
+    /* padding-right: 150px; */
+    margin-right: 300px;
+    
 }
 .score{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
-.pacman{
-    display: inline-block;
+.game-box{
+    display: inline-grid;
     margin-top: 5%;
     margin-left: 20%;
     margin-right: 20%;
     width: 100vh;
     height: 70vh;
-    background-color: aliceblue;
+    background-color:black;
+}
+
+.square{
+    display: block;
+}
+
+.scared {
+  background: blue !important;
+}
+
+.blinky {
+  background: red;
+}
+
+.pinky {
+  background: pink;
+}
+
+.inky {
+  background: cyan;
+}
+
+.clyde {
+  background: orange;
+}
+.blank {
+  background: black;
+}
+
+.wall {
+  border: 1px solid blue;
+}
+
+.dot {
+  background: white;
+  border: 8px solid black;
+  border-radius: 50%;
+}
+
+.pill {
+  background: white;
+  border: 5px solid black;
+  border-radius: 50%;
+}
+
+.ghost {
+  position: relative;
+  border-radius: 10px 10px 2px 2px;
+  border: none;
 }
