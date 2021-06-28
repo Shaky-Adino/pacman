@@ -79,7 +79,6 @@ const BOARD = [
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 ];
 
-//GameBoard.js
 class GameBoard{
    
     static createGrid(board,layout){
@@ -87,7 +86,10 @@ class GameBoard{
         board.forEach((item)=>{
             let div = document.createElement('div');
             div.classList.add('square', CLASS_LIST[item]);
-            div.style.cssText = `width: ${CELL_SIZE}px; height: ${CELL_SIZE}px;`
+            if(item==2)
+              div.style.cssText = `width: ${CELL_SIZE-10}px; height: ${CELL_SIZE-10}px;`
+            else
+              div.style.cssText = `width: ${CELL_SIZE}px; height: ${CELL_SIZE}px;`
             layout.appendChild(div);
         });
     }
