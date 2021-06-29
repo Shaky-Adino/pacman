@@ -82,14 +82,14 @@ const BOARD = [
 class GameBoard{
    
     static createGrid(board,layout){
-        layout.style.cssText = `grid-template-columns: repeat(${GRID_SIZE},auto);`;
+        layout.style.cssText = `grid-template-columns: repeat(${GRID_SIZE},${CELL_SIZE}px);`;
         board.forEach((item)=>{
             let div = document.createElement('div');
             div.classList.add('square', CLASS_LIST[item]);
             if(item==2)
-              div.style.cssText = `width: ${CELL_SIZE-10}px; height: ${CELL_SIZE-10}px;`
+              div.style.cssText = `width: 40%; height: 40%;`
             else
-              div.style.cssText = `width: ${CELL_SIZE}px; height: ${CELL_SIZE}px;`
+              div.style.cssText = `width: 80%; height: 80%;`
             layout.appendChild(div);
         });
     }
