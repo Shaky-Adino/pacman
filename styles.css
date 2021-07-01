@@ -74,9 +74,12 @@ h1{
 }
 
 .pill {
-  background: yellow;
-  border: 1px solid black;
+  background:white;
+  /* border: 1px solid black; */
   border-radius: 50%;
+  margin-left: 15%;
+  margin-top: 15%;
+  box-shadow: 0px 0px 20px 5px white;
 }
 
 .ghost {
@@ -84,4 +87,62 @@ h1{
   border-radius: 10px 10px 2px 2px;
   border: none;
 }
+/* 
+.pacman {
+  background: yellow;
+  border: none;
+  border-radius: 50%;
+  clip-path: polygon(
+    0 0,
+    20px 0,
+    20px -5px,
+    8px 10px,
+    20px 25px,
+    20px 20px,
+    0 20px
+  );
+  animation: chew 0.2s linear forwards infinite;
+} */
 
+/* 
+body{
+  background:black;
+}
+
+
+.container{
+  color:white;
+  display:block;
+  height:200px;
+  width:200px;
+  background-color:black;}
+ */
+
+ 
+
+.pacman{
+  background: yellow;
+  border: none;
+  margin-top:10%;
+  border-radius: 50%;
+  clip-path: polygon(44% 48%, 100% 74%, 100% 100%, 0 100%, 0 0, 100% 0, 100% 21%);
+  animation: chew 0.6s linear forwards infinite;
+}  
+
+@keyframes chew{
+  0%{
+    clip-path: polygon(44% 48%, 100% 74%, 100% 100%, 0 100%, 0 0, 100% 0, 100% 21%);
+  }
+   25%{
+    clip-path: polygon(44% 48%, 100% 62%, 100% 100%, 0 100%, 0 0, 100% 0, 100% 37%);
+  }
+  50%{
+    clip-path: polygon(44% 48%, 100% 50%, 100% 100%, 0 100%, 0 0, 100% 0, 100% 50%)
+  }
+   75%{
+    clip-path: polygon(44% 48%, 100% 62%, 100% 100%, 0 100%, 0 0, 100% 0, 100% 37%);
+  }
+   100%{
+    clip-path: polygon(44% 48%, 100% 74%, 100% 100%, 0 100%, 0 0, 100% 0, 100% 21%);
+  }
+}

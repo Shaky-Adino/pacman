@@ -64,9 +64,9 @@ const BOARD = [
   1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1,
   0, 0, 0, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0, 0, 0,
   0, 0, 0, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 0, 0, 0,
-  1, 1, 1, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 1, 1, 1, 
-  0, 0, 0, 0, 2, 2, 2, 1, 9, 9, 9, 9, 1, 2, 2, 2, 0, 0, 0, 0, 
-  1, 1, 1, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 1, 1, 1, 
+  1, 1, 1, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 1, 1, 1,
+  0, 0, 0, 0, 2, 2, 2, 1, 9, 9, 9, 9, 1, 2, 2, 2, 0, 0, 0, 0,
+  1, 1, 1, 1, 2, 1, 2, 1, 9, 9, 9, 9, 1, 2, 1, 2, 1, 1, 1, 1,
   0, 0, 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 0, 0, 0,
   0, 0, 0, 1, 2, 1, 2, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 0, 0, 0,
   1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1,
@@ -79,23 +79,107 @@ const BOARD = [
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 ];
 
-class GameBoard{
-   
-    static createGrid(board,layout){
-        layout.style.cssText = `grid-template-columns: repeat(${GRID_SIZE},${CELL_SIZE}px);`;
-        board.forEach((item)=>{
-            let div = document.createElement('div');
-            div.classList.add('square', CLASS_LIST[item]);
-            if(item==2)
-              div.style.cssText = `width: 40%; height: 40%;`
-            else
-              div.style.cssText = `width: 80%; height: 80%;`
-            layout.appendChild(div);
-        });
-    }
-   
+
+//Gameboard
+class GameBoard {
+
+
+  createGrid(board, layout) {
+    this.grid = [];
+    layout.style.cssText = `grid-template-columns: repeat(${GRID_SIZE},${CELL_SIZE}px);`;
+    board.forEach((item) => {
+      let div = document.createElement('div');
+      div.classList.add('square', CLASS_LIST[item]);
+      if (item == 2)
+        div.style.cssText = `width: 40%; height: 40%;`
+      else if (item == 7)
+        div.style.cssText = `width: 60%; height: 60%;`
+      else
+        div.style.cssText = `width: 80%; height: 80%;`
+      layout.appendChild(div);
+      this.grid.push(div);
+    });
+
+  }
+
+  addClass(position, classes) {
+    this.grid[position].classList.add(...classes);
+
+  }
+
+  removeClass(position, classes) {
+    this.grid[position].classList.remove(...classes);
+  }
+
+  objectExist(position, classes) {
+    this.grid[position].classList.remove(...classes);
+  }
+
+  rotateDiv(pos, deg) {
+    this.grid[pos].style.transform = `rotate(${deg}deg)`;
+  }
 };
 const gameBox = document.querySelector('.game-box');
 
-GameBoard.createGrid(BOARD,gameBox);
+//Pacman
 
+class Pacman {
+  constructor(speed, startPos) {
+    this.pos = startPos;
+    this.speed = speed;
+    this.dir = null;
+    this.timer = 0;
+    this.powerPill = 0;
+    this.rotation = 0;
+  }
+
+  shouldMove() {
+    if (!this.dir)
+      return false;
+    if (this.timer === this.speed) {
+      this.timer = 0;
+      return true;
+    }
+    this.timer++;
+  }
+
+  getNextMove(objectExist) {
+    let nextMove = this.pos + this.dir.movement;
+    if (objectExist(nextMove, OBJECT_TYPE.WALL) ||
+      objectExist(nextMove, OBJECT_TYPE.GHOSTLAIR)
+    ) {
+      nextMove = this.pos;
+    }
+    return {nextMove, direction: (void 0).pos};
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var gameBoard = new GameBoard();
+
+gameBoard.createGrid(BOARD, gameBox);
+gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
