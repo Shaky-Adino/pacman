@@ -12,13 +12,20 @@ body{
 h1{
     text-align: center;
     background-color:#00ADB5;
+    font-size: 3em;
+    margin-top: 0;
     padding: 20px;
     border-radius: 10px;
     background-image: linear-gradient(to right,#132C33,#A3D2CA 20%);
 }
+.start{
+  color: white;
+  text-align: center;
+}
 .hs{
     margin-top: 15%;
     width: 15%;
+    font-size: xx-large;
     text-align: center;
     color:aqua;
 }
@@ -38,6 +45,12 @@ h1{
     margin-top: 5%;
     background-color:black;
     box-shadow: 0px 0px 20px 5px #A6F0C6;
+}
+
+.flip{
+    transform: rotateY(360deg);
+    transform-style: preserve-3d;
+    transition: transform 3s;
 }
 
 .square{
@@ -94,38 +107,6 @@ h1{
   border-radius: 10px 10px 2px 2px;
   border: none;
 }
-/* 
-.pacman {
-  background: yellow;
-  border: none;
-  border-radius: 50%;
-  clip-path: polygon(
-    0 0,
-    20px 0,
-    20px -5px,
-    8px 10px,
-    20px 25px,
-    20px 20px,
-    0 20px
-  );
-  animation: chew 0.2s linear forwards infinite;
-} */
-
-/* 
-body{
-  background:black;
-}
-
-
-.container{
-  color:white;
-  display:block;
-  height:200px;
-  width:200px;
-  background-color:black;}
- */
-
- 
 
 .pacman{
   background: yellow;

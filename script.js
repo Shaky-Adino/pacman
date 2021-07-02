@@ -83,7 +83,6 @@ const BOARD = [
 //Gameboard
 class GameBoard {
 
-
   createGrid(board, layout) {
     this.grid = [];
     layout.style.cssText = `grid-template-columns: repeat(${GRID_SIZE},${CELL_SIZE}px);`;
@@ -119,7 +118,6 @@ class GameBoard {
     this.grid[pos].style.transform = `rotate(${deg}deg)`;
   }
 };
-const gameBox = document.querySelector('.game-box');
 
 //Pacman
 
@@ -201,8 +199,18 @@ class Pacman {
 
 
 
-
+let flag = 0;
+const gameBox = document.querySelector('.game-box');
 var gameBoard = new GameBoard();
-
 gameBoard.createGrid(BOARD, gameBox);
-gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
+gameBox.classList.add('flip');
+
+document.addEventListener('click',()=>{
+    if(flag == 0){
+      document.querySelector("h2").style.display = 'none';
+      //start();
+      flag = 1;
+      gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
+    }
+});
+
