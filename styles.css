@@ -1,6 +1,13 @@
+@font-face {
+  font-family: gameFont;
+  src: url(fonts/MachineGunk-nyqg.ttf);
+}
+
 body{
+    font-family: gameFont;
     margin: 0;
     background-color: black;
+    letter-spacing: 0.22em;
 }
 h1{
     text-align: center;
