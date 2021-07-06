@@ -110,7 +110,7 @@ class GameBoard {
     this.grid[position].classList.remove(...classes);
   }
 
-  objectExist(position, classes) {
+  objectExist = (position, classes) => {
     this.grid[position].classList.contains(...classes);
   }
 
@@ -120,7 +120,6 @@ class GameBoard {
 };
 
 //Pacman
-
 class Pacman {
   constructor(speed, startPos) {
     this.pos = startPos;
@@ -136,7 +135,7 @@ class Pacman {
       return false;
     if (this.timer === this.speed) {
       this.timer = 0;
-      return true;
+      return true; 
     }
     this.timer++;
   }
@@ -144,52 +143,44 @@ class Pacman {
   getNextMove(objectExist) {
     let nextMove = this.pos + this.dir.movement;
     if (objectExist(nextMove, OBJECT_TYPE.WALL) ||
-      objectExist(nextMove, OBJECT_TYPE.GHOSTLAIR)
-    ) {
+      objectExist(nextMove, OBJECT_TYPE.GHOSTLAIR)) 
+    {
       nextMove = this.pos;
     }
-    return {nextMove, direction: (void 0).pos};
+    return {
+      nextMove,
+      direction: (void 0).pos
+    };
   }
 
-  makeMove(){
+  makeMove() {
     const classesToRemove = [OBJECT_TYPE.PACMAN];
     const classesToAdd = [OBJECT_TYPE.PACMAN];
 
-    return {classesToRemove,classesToAdd};
+    return {
+      classesToRemove,
+      classesToAdd
+    };
   }
 
-  setNewPos(nextMovePos){
+  setNewPos(nextMovePos) {
     this.pos = nextMovePos;
   }
 
-  handleKeyInput(e,objectExist){
+  handleKeyInput(e, objectExist) {
     let dir;
-    if(e.keyCode >= 37 && e.keyCode <= 40)
+    if (e.keyCode >= 37 && e.keyCode <= 40){
       dir = DIRECTIONS[e.key];
+      console.log(e);
+    }
     else
       return;
     const nextMovePos = this.pos + dir.movement;
-    if(objectExist(nextMovePos,OBJECT_TYPE.WALL))
+    if (objectExist(nextMovePos, OBJECT_TYPE.WALL))
       return;
     this.dir = dir;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -205,12 +196,19 @@ var gameBoard = new GameBoard();
 gameBoard.createGrid(BOARD, gameBox);
 gameBox.classList.add('flip');
 
-document.addEventListener('click',()=>{
-    if(flag == 0){
-      document.querySelector("h2").style.display = 'none';
-      //start();
-      flag = 1;
-      gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
-    }
-});
+function startGame() {
 
+  if (flag == 0) {
+    document.querySelector("h2").style.display = 'none';
+    //start();
+    flag = 1;
+    gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
+
+  }
+  const pacman = new Pacman(2, 290);
+  document.addEventListener('keydown', (e) => {
+    pacman.handleKeyInput(e, gameBoard.objectExist);
+  })
+}
+
+document.addEventListener('click', startGame);
