@@ -101,17 +101,16 @@ class GameBoard {
 
   }
 
-  addClass(position, classes) {
+  addClass = (position, classes) => {
     this.grid[position].classList.add(...classes);
-
   }
 
-  removeClass(position, classes) {
+  removeClass = (position, classes) => {
     this.grid[position].classList.remove(...classes);
   }
 
   objectExist = (position, classes) => {
-    this.grid[position].classList.contains(...classes);
+    return this.grid[position].classList.contains(...classes);
   }
 
   rotateDiv(pos, deg) {
@@ -167,18 +166,39 @@ class Pacman {
     this.pos = nextMovePos;
   }
 
-  handleKeyInput(e, objectExist) {
-    let dir;
+  handleKeyInput(e, objectExist,addClass,removeClass) {
+    let dir = DIRECTIONS[e.key];
     if (e.keyCode >= 37 && e.keyCode <= 40){
-      dir = DIRECTIONS[e.key];
-      console.log(e);
+      
+      const nextMovePos = this.pos + dir.movement;
+
+      removeClass(this.pos,[OBJECT_TYPE.PACMAN]);
+
+      switch(e.keyCode){
+        //left key
+        case 37: 
+                if(this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+                    this.pos = nextMovePos;
+                break;
+        //up key
+        case 38:
+                if(nextMovePos >= 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+                    this.pos = nextMovePos;
+                break;
+        //right key
+        case 39:
+                if(this.pos % GRID_SIZE != GRID_SIZE - 1 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+                    this.pos = nextMovePos;
+                break;
+        //down key
+        case 40:
+                if(nextMovePos <= 459 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+                    this.pos = nextMovePos;
+                break;
+      }
+
+      addClass(this.pos,[OBJECT_TYPE.PACMAN]);
     }
-    else
-      return;
-    const nextMovePos = this.pos + dir.movement;
-    if (objectExist(nextMovePos, OBJECT_TYPE.WALL))
-      return;
-    this.dir = dir;
   }
 }
 
@@ -207,7 +227,7 @@ function startGame() {
   }
   const pacman = new Pacman(2, 290);
   document.addEventListener('keydown', (e) => {
-    pacman.handleKeyInput(e, gameBoard.objectExist);
+    pacman.handleKeyInput(e, gameBoard.objectExist,gameBoard.addClass,gameBoard.removeClass);
   })
 }
 
