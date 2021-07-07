@@ -89,12 +89,6 @@ class GameBoard {
     board.forEach((item) => {
       let div = document.createElement('div');
       div.classList.add('square', CLASS_LIST[item]);
-      if (item == 2)
-        div.style.cssText = `width: 40%; height: 40%;`
-      else if (item == 7)
-        div.style.cssText = `width: 60%; height: 60%;`
-      else
-        div.style.cssText = `width: 80%; height: 80%;`
       layout.appendChild(div);
       this.grid.push(div);
     });
@@ -134,7 +128,7 @@ class Pacman {
       return false;
     if (this.timer === this.speed) {
       this.timer = 0;
-      return true; 
+      return true;
     }
     this.timer++;
   }
@@ -142,8 +136,7 @@ class Pacman {
   getNextMove(objectExist) {
     let nextMove = this.pos + this.dir.movement;
     if (objectExist(nextMove, OBJECT_TYPE.WALL) ||
-      objectExist(nextMove, OBJECT_TYPE.GHOSTLAIR)) 
-    {
+      objectExist(nextMove, OBJECT_TYPE.GHOSTLAIR)) {
       nextMove = this.pos;
     }
     return {
@@ -166,38 +159,48 @@ class Pacman {
     this.pos = nextMovePos;
   }
 
-  handleKeyInput(e, objectExist,addClass,removeClass) {
+  handleKeyInput(e, objectExist, addClass, removeClass) {
     let dir = DIRECTIONS[e.key];
-    if (e.keyCode >= 37 && e.keyCode <= 40){
-      
+    if (e.keyCode >= 37 && e.keyCode <= 40) {
+
       const nextMovePos = this.pos + dir.movement;
 
-      removeClass(this.pos,[OBJECT_TYPE.PACMAN]);
+      removeClass(this.pos, [OBJECT_TYPE.PACMAN, 'pacu']);
 
-      switch(e.keyCode){
+      if(BOARD[this.pos] == 0)
+          addClass(this.pos,['blank-duplicate']);
+      else if(BOARD[this.pos] == 2)
+          addClass(this.pos,['dot-duplicate']);
+      else if(BOARD[this.pos] == 7)
+          addClass(this.pos,['pill-duplicate']);
+
+      switch (e.keyCode) {
         //left key
-        case 37: 
-                if(this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
-                    this.pos = nextMovePos;
-                break;
-        //up key
+        case 37:
+          if (this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+            this.pos = nextMovePos;
+          break;
+          //up key
         case 38:
-                if(nextMovePos >= 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
-                    this.pos = nextMovePos;
-                break;
-        //right key
+          if (nextMovePos >= 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+            this.pos = nextMovePos;
+          break;
+          //right key
         case 39:
-                if(this.pos % GRID_SIZE != GRID_SIZE - 1 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
-                    this.pos = nextMovePos;
-                break;
-        //down key
+          if (this.pos % GRID_SIZE != GRID_SIZE - 1 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+            this.pos = nextMovePos;
+          break;
+          //down key
         case 40:
-                if(nextMovePos <= 459 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
-                    this.pos = nextMovePos;
-                break;
+          if (nextMovePos <= 459 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+            this.pos = nextMovePos;
+          break;
       }
 
-      addClass(this.pos,[OBJECT_TYPE.PACMAN]);
+      removeClass(this.pos, [CLASS_LIST[BOARD[this.pos]],'blank-duplicate','dot-duplicate','pill-duplicate']);
+
+      addClass(this.pos, [OBJECT_TYPE.PACMAN,'pacu']);
+
     }
   }
 }
@@ -217,18 +220,17 @@ gameBoard.createGrid(BOARD, gameBox);
 gameBox.classList.add('flip');
 
 function startGame() {
-
   if (flag == 0) {
     document.querySelector("h2").style.display = 'none';
     //start();
     flag = 1;
     gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
-
   }
-  const pacman = new Pacman(2, 290);
-  document.addEventListener('keydown', (e) => {
-    pacman.handleKeyInput(e, gameBoard.objectExist,gameBoard.addClass,gameBoard.removeClass);
-  })
 }
+
+const pacman = new Pacman(2, 290);
+document.addEventListener('keydown', (e) => {
+  pacman.handleKeyInput(e, gameBoard.objectExist, gameBoard.addClass, gameBoard.removeClass);
+})
 
 document.addEventListener('click', startGame);

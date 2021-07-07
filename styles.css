@@ -83,19 +83,41 @@ h1{
 }
 .blank {
   background: black;
+  width: 80%;
+  height: 80%;
 }
 
+.blank-duplicate{
+  background: black;
+  width: 80%;
+  height: 80%;
+
+}
 .wall {
   border: 2px solid black;
   background-color: aqua;
+  width: 80%; height: 80%;
 }
 
 .dot {
   background: white;
   border: 1px solid black;
   border-radius: 50%;
- margin-left: 25%;
- margin-top: 25%;
+  margin-left: 25%;
+  margin-top: 25%;
+   width: 40%;
+  height: 40%;
+}
+
+
+.dot-duplicate {
+  background: black;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin-left: 25%;
+  margin-top: 25%;
+   width: 40%;
+  height: 40%;
 }
 
 .pill {
@@ -105,7 +127,21 @@ h1{
   margin-left: 15%;
   margin-top: 15%;
   box-shadow: 0px 0px 20px 5px white;
+   width: 60%;
+  height: 60%;
 }
+
+.pill-duplicate{
+  background:black;
+  /* border: 1px solid black; */
+  border-radius: 50%;
+  margin-left: 15%;
+  margin-top: 15%;
+  /* box-shadow: 0px 0px 20px 5px white; */
+   width: 60%;
+  height: 60%;
+}
+
 
 .ghost {
   position: relative;
@@ -121,6 +157,9 @@ h1{
   clip-path: polygon(44% 48%, 100% 74%, 100% 100%, 0 100%, 0 0, 100% 0, 100% 21%);
   animation: chew 0.6s linear forwards infinite;
 }  
+.pacu{
+  margin: 10%;
+}
 
 @keyframes chew{
   0%{
