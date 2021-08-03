@@ -107,20 +107,22 @@ class GameBoard {
     return this.grid[position].classList.contains(...classes);
   }
 
-  rotateDiv(pos, deg) {
+  rotateDiv = (pos, deg) => {
     this.grid[pos].style.transform = `rotate(${deg}deg)`;
+    // console.log("This is grid pos"+this.grid[pos]);
   }
 };
 
-//Pacman
+//Pacman  
 class Pacman {
   constructor(speed, startPos) {
     this.pos = startPos;
     this.speed = speed;
     this.dir = null;
     this.timer = 0;
-    this.powerPill = 0;
+    this.powerPill = 0;;
     this.rotation = 0;
+    this.faceDirection = [0,0,1,0]; 
   }
 
   shouldMove() {
@@ -132,6 +134,7 @@ class Pacman {
     }
     this.timer++;
   }
+
 
   getNextMove(objectExist) {
     let nextMove = this.pos + this.dir.movement;
@@ -159,13 +162,18 @@ class Pacman {
     this.pos = nextMovePos;
   }
 
-  handleKeyInput(e, objectExist, addClass, removeClass) {
+  handleKeyInput(e, gameBoard) {
+
+    let addClass = gameBoard.addClass;
+    let removeClass = gameBoard.removeClass;
+    let objectExist =  gameBoard.objectExist;
+    let rotateDiv = gameBoard.rotateDiv;
+
     let dir = DIRECTIONS[e.key];
     if (e.keyCode >= 37 && e.keyCode <= 40) {
 
       const nextMovePos = this.pos + dir.movement;
-
-      removeClass(this.pos, [OBJECT_TYPE.PACMAN, 'pacu']);
+      removeClass(this.pos, [OBJECT_TYPE.PACMAN, 'pacu',]);
 
       if(BOARD[this.pos] == 0)
           addClass(this.pos,['blank-duplicate']);
@@ -177,36 +185,72 @@ class Pacman {
       switch (e.keyCode) {
         //left key
         case 37:
-          if (this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+          if (this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
             this.pos = nextMovePos;
+            rotateDiv(this.pos,180);
+          }
           break;
           //up key
         case 38:
-          if (nextMovePos >= 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+          if (nextMovePos >= 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
             this.pos = nextMovePos;
+            rotateDiv(this.pos,-90);
+          }
           break;
           //right key
         case 39:
-          if (this.pos % GRID_SIZE != GRID_SIZE - 1 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+          if (this.pos % GRID_SIZE != GRID_SIZE - 1 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
             this.pos = nextMovePos;
+            rotateDiv(this.pos,0);
+          }
           break;
           //down key
         case 40:
-          if (nextMovePos <= 459 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR]))
+          if (nextMovePos <= 459 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
             this.pos = nextMovePos;
+            rotateDiv(this.pos,90);
+          }
           break;
       }
 
-      removeClass(this.pos, [CLASS_LIST[BOARD[this.pos]],'blank-duplicate','dot-duplicate','pill-duplicate']);
+      removeClass(this.pos, [CLASS_LIST[BOARD[this.pos]],'blank-duplicate','dot-duplicate','pill-duplicate',]);
+      
+      addClass(this.pos, [OBJECT_TYPE.PACMAN,'pacu',]);
+      
+    }
+  }
 
-      addClass(this.pos, [OBJECT_TYPE.PACMAN,'pacu']);
+  
+  contMove(gameBoard){
+    var index;
+    while(true){
+      for(let i=0;i<4;i++){
+        if(this.faceDirection[i]){
+          index = i;
+          break;
+        }
+      }
+      switch(index){
+        case 0:
+             if (this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
 
+             }
+      
+        case 1:
+
+
+        case 2:
+
+
+
+        case 3:
+
+
+
+      }
     }
   }
 }
-
-
-
 
 
 
@@ -224,13 +268,23 @@ function startGame() {
     document.querySelector("h2").style.display = 'none';
     //start();
     flag = 1;
-    gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
+      gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
+    setTimeout(()=>{},3000)
   }
 }
 
 const pacman = new Pacman(2, 290);
+var prevKey=39;
+
 document.addEventListener('keydown', (e) => {
-  pacman.handleKeyInput(e, gameBoard.objectExist, gameBoard.addClass, gameBoard.removeClass);
+if(e.keycode===prevKey){
+// setInterval(()=>{
+//   pacman.handleKeyInput(e, gameBoard);
+// },100);
+}
+
+else
+  prevKey=e.keyCode;
 })
 
 document.addEventListener('click', startGame);
