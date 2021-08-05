@@ -122,7 +122,6 @@ class Pacman {
     this.timer = 0;
     this.powerPill = 0;;
     this.rotation = 0;
-    this.faceDirection = [0,0,1,0]; 
   }
 
   shouldMove() {
@@ -162,7 +161,12 @@ class Pacman {
     this.pos = nextMovePos;
   }
 
-  handleKeyInput(e, gameBoard) {
+  handleKeyInput(gameBoard) {
+
+    if(!direction)
+      return;
+
+    var e = direction;
 
     let addClass = gameBoard.addClass;
     let removeClass = gameBoard.removeClass;
@@ -185,9 +189,15 @@ class Pacman {
       switch (e.keyCode) {
         //left key
         case 37:
-          if (this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
-            this.pos = nextMovePos;
+          if (this.pos === 220 || (this.pos % GRID_SIZE !== 0) && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
+            if (this.pos == 220)
+              this.pos = 239;
+            else
+              this.pos = nextMovePos;
             rotateDiv(this.pos,180);
+          }
+          else{
+            direction = prevDirection;
           }
           break;
           //up key
@@ -196,12 +206,21 @@ class Pacman {
             this.pos = nextMovePos;
             rotateDiv(this.pos,-90);
           }
+          else{
+            direction = prevDirection;
+          }
           break;
           //right key
         case 39:
-          if (this.pos % GRID_SIZE != GRID_SIZE - 1 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
-            this.pos = nextMovePos;
+          if (this.pos === 239 || (this.pos % GRID_SIZE !== GRID_SIZE - 1) && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
+            if(this.pos == 239)
+              this.pos = 220;
+            else
+              this.pos = nextMovePos;
             rotateDiv(this.pos,0);
+          }
+          else{
+            direction = prevDirection;
           }
           break;
           //down key
@@ -210,8 +229,13 @@ class Pacman {
             this.pos = nextMovePos;
             rotateDiv(this.pos,90);
           }
+          else{
+            direction = prevDirection;
+          }
           break;
       }
+
+      prevDirection = direction;
 
       removeClass(this.pos, [CLASS_LIST[BOARD[this.pos]],'blank-duplicate','dot-duplicate','pill-duplicate',]);
       
@@ -219,42 +243,7 @@ class Pacman {
       
     }
   }
-
-  
-  contMove(gameBoard){
-    var index;
-    while(true){
-      for(let i=0;i<4;i++){
-        if(this.faceDirection[i]){
-          index = i;
-          break;
-        }
-      }
-      switch(index){
-        case 0:
-             if (this.pos % GRID_SIZE !== 0 && !objectExist(nextMovePos, [OBJECT_TYPE.WALL]) && !objectExist(nextMovePos, [OBJECT_TYPE.GHOSTLAIR])){
-
-             }
-      
-        case 1:
-
-
-        case 2:
-
-
-
-        case 3:
-
-
-
-      }
-    }
-  }
 }
-
-
-
-
 
 
 let flag = 0;
@@ -268,23 +257,19 @@ function startGame() {
     document.querySelector("h2").style.display = 'none';
     //start();
     flag = 1;
-      gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
-    setTimeout(()=>{},3000)
+    gameBoard.addClass(290, [OBJECT_TYPE.PACMAN]);
   }
 }
 
 const pacman = new Pacman(2, 290);
-var prevKey=39;
-
+var direction = false;
+var prevDirection = false;
 document.addEventListener('keydown', (e) => {
-if(e.keycode===prevKey){
-// setInterval(()=>{
-//   pacman.handleKeyInput(e, gameBoard);
-// },100);
-}
-
-else
-  prevKey=e.keyCode;
-})
+    direction = e;
+});
 
 document.addEventListener('click', startGame);
+
+setInterval(()=>{
+  pacman.handleKeyInput(gameBoard);
+},150);
